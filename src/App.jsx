@@ -3,14 +3,17 @@ import axios from 'axios'
 const App = () => {
   const [userData, setUserData] = useState([]);
   const getData =  async() => {
-    const response = await axios.get
-    ('https://picsum.photos/v2/list?page=11&limit=35');
+    const response = await axios.get(`https://picsum.photos/v2/list?page=${index}&limit=35`);
     setUserData(response.data);
   }
+  const [index, setIndex] = useState(1)
+
   useEffect(function(){
   getData();
-  })
- let printData = <h3>No User Available</h3>;
+  },[index])
+
+ let printData = <h3 className='text-gray-400 text-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>Loading...</h3>;
+
  if(userData.length > 0){
   printData = userData.map(function(elem,idx){
     return <div key={idx}>
@@ -23,6 +26,7 @@ const App = () => {
     </div>
   });
 }
+
   return (
     <div className='overflow-y-auto bg-black h-screen p-4 text-white'>
       {/* <button onClick={getData}
@@ -33,8 +37,21 @@ const App = () => {
           {printData}
         </div>
         <div className='flex justify-center gap-6 items-center p-4'>
-          <button className='bg-amber-400 text-black text-sm cursor-pointer active:scale-95 font-semibold px-4 py-2 rounded-xl'>Prev</button>
-          <button className='bg-amber-400 text-black text-sm cursor-pointer active:scale-95 font-semibold px-4 py-2 rounded-xl'>Next</button>
+          <button className=
+          'bg-amber-400 text-black text-sm cursor-pointer active:scale-95 font-semibold px-4 py-2 rounded-xl'
+           onClick={() => {
+            if(index > 1)
+              setIndex(index - 1)
+              setUserData([])
+
+            }}
+            > Prev</button>
+          <button className='bg-amber-400 text-black text-sm cursor-pointer active:scale-95 font-semibold px-4 py-2 rounded-xl'
+           onClick={() =>{
+             setIndex(index + 1)
+             setUserData([]) }}
+          
+           > Next</button>
         </div>
     </div>
     
